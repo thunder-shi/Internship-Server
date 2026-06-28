@@ -1,0 +1,15 @@
+# Internship 自动发版（北京时间）
+# 安装：cp /opt/internship/server_directory/cron/internship-deploy.cron /etc/cron.d/internship-deploy
+#       chmod 644 /etc/cron.d/internship-deploy
+#
+# 日志：/var/log/internship-deploy.log
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+CRON_TZ=Asia/Shanghai
+
+# 每天 1:00 正常发版
+0 1 * * * root /opt/internship/server_directory/scripts/auto-deploy.sh >> /var/log/internship-deploy.log 2>&1
+
+# 每天 2:00 仅当 1:00 失败时重试
+0 2 * * * root /opt/internship/server_directory/scripts/auto-deploy.sh --retry-if-failed >> /var/log/internship-deploy.log 2>&1
